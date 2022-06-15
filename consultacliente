@@ -1,0 +1,41 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include<locale.h>
+#include<string.h>
+#include <conio.h>
+
+struct cliente {
+ int codigo; // codigo do sujeito
+ char nomecli[50]; // nome do sujeito
+ char telefone [15]; // fone do sujeito
+ char sexo; // sexo
+ char cpf[11];};
+
+int main(){
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "r");
+    if (Arquivo == NULL){
+        printf("Arquivo inexistente!");  
+    }
+    
+    struct cliente ler;
+    int cod, encon;
+    do{
+    printf ("\nDigite o codigo do cliente para consultá-lo: ");
+    scanf ("%d", &cod);
+    
+    while (fread (&ler, sizeof(ler), 1, Arquivo)){   
+    if (cod == ler.codigo) {
+        printf("Código do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",ler.codigo, ler.nomecli, ler.telefone, ler.sexo, ler.cpf);
+        getch();
+        }
+        if (encon==0){
+        printf ("\nCodigo nao cadastrado!!\n");
+        fclose(Arquivo);
+        getch();
+        }
+    }
+    }while(cod=!0);
+    }
+
+    
