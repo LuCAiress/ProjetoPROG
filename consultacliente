@@ -29,6 +29,7 @@ int main(){
         encon = 1;
         printf("Código do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",ler.codigo, ler.nomecli, ler.telefone, ler.sexo, ler.cpf);
         getch();
+        exit(0);
         }
     }
     encon=0;
@@ -40,7 +41,6 @@ int main(){
     }
 } 
 
-    
     
 
 
