@@ -86,11 +86,11 @@ printf("13. Excluir cliente\n");
 printf("14. Excluir produto\n");
 printf("15. Excluir compra/venda\n");
 printf("0. Sair\n\n");
-printf("Digite sua opção: ");
+printf("Digite sua opÃ§Ã£o: ");
 scanf("%d", &opcao);
-if ((opcao < 0) or (opcao > 15))
-printf ("Opção Digitada Não Existe!\n");
-} while ((opcao < 0) or (opcao > 15));
+if ((opcao < 0) || (opcao > 15))
+printf ("OpÃ§Ã£o Digitada NÃ£o Existe!\n");
+} while ((opcao < 0) || (opcao > 15));
 return opcao;
 }
 
@@ -193,13 +193,13 @@ void Entrada_produto(FILE *Arquivo){
 	char resp;
 	do{
 	
-	printf("adicione o código do produto;ZERO FINALIZA");
+	printf("adicione o cÃ³digo do produto;ZERO FINALIZA");
 	scanf("%d",&novo.cdgprod);
 	if(novo.cdgprod!=0){
 	printf("adicione o nome do produto\n");
 	fflush(stdin);
 	gets(novo.nome);
-	printf("adicione o preço do produto\n");
+	printf("adicione o preÃ§o do produto\n");
 	scanf("%f",&novo.preco);
 	printf("adicione a quantidade do produto\n");
 	scanf("%d",&novo.qtd);
@@ -207,9 +207,9 @@ void Entrada_produto(FILE *Arquivo){
 	if(resp=='S'){
 	retorno=fwrite(&novo,sizeof(struct produto),1,Arquivo);
 	if(retorno=1){
-	printf("gravação efetuada com sucesso\n");
+	printf("gravaÃ§Ã£o efetuada com sucesso\n");
 }
-		else printf("houve um problema na gravação\n");
+		else printf("houve um problema na gravaÃ§Ã£o\n");
 		getch();
 }
 }
