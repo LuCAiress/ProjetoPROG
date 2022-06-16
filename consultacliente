@@ -35,7 +35,6 @@ int main(){
     encon=0;
     if (encon==0){
         printf ("\nCodigo nao cadastrado!!\n");
-        fclose(Arquivo);
         getch();
         }
     }
