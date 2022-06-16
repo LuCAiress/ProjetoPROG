@@ -20,8 +20,10 @@ int main(){
     
     struct cliente ler;
     int cod, encon;
-    
+    do {
+    rewind (Arquivo);
     printf ("\nDigite o codigo do cliente para consultá-lo: ");
+    encon=0;
     scanf ("%d", &cod);
     if(cod!=0){
     while (fread (&ler, sizeof(ler), 1, Arquivo)){
@@ -29,17 +31,14 @@ int main(){
         encon = 1;
         printf("Código do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",ler.codigo, ler.nomecli, ler.telefone, ler.sexo, ler.cpf);
         getch();
-        exit(0);
         }
     }
-    encon=0;
-    if (encon==0){
+    
+    if (!encon){
         printf ("\nCodigo nao cadastrado!!\n");
         getch();
         }
     }
-} 
-
-    
-
+}while(cod!=0); 
+}
 
