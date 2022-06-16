@@ -99,7 +99,7 @@ char incluir_cliente(){
  FILE * Arquivo;
  	int erro=0;
      char arqcli [] = {"CLIENTE.txt"};
-	 Arquivo = fopen(arqcli, "rb+");
+	 Arquivo = fopen(arqcli, "ab+");
   	 if (Arquivo == NULL) {
 	 printf(" \n Arquivo %s Nao existe : Tecle algo para criar agora ! ", arqcli);
  	getch();
