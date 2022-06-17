@@ -172,7 +172,7 @@ char incluir_produto(){
 	 FILE * Arquivo;
  	int erro=0;
      char arqprod [] = {"PRODUTO.txt"};
-	 Arquivo = fopen(arqprod, "rb+");
+	 Arquivo = fopen(arqprod, "ab+");
   	 if (Arquivo == NULL) {
 	 printf(" \n Arquivo %s Nao existe : Tecle algo para criar agora ! ", arqprod);
  	getch();
