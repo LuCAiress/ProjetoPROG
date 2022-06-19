@@ -1,0 +1,54 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include<locale.h>
+#include<string.h>
+#include <conio.h>
+
+struct cliente {
+ int codigo; // codigo do sujeito
+ char nomecli[50]; // nome do sujeito
+ char telefone [15]; // fone do sujeito
+ char sexo; // sexo
+ char cpf[11];};
+
+int main(){
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
+    if (Arquivo == NULL){
+        printf("Arquivo inexistente!");  
+    }
+struct cliente excluir;    
+int cod, encon;
+char conf;
+do {
+    rewind (Arquivo);
+printf ("\nDigite o codigo que deseja EXCLUIR: \n");
+encon=0;
+scanf ("%d", &cod);
+if (cod!=0){
+
+while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
+if (cod == excluir.codigo){
+printf("\nCódigo do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",excluir.codigo, excluir.nomecli, excluir.telefone, excluir.sexo, excluir.cpf);
+encon=1;
+
+printf("Tem certeza que quer excluir este produto? S/N \\n");
+fflush(stdin);
+scanf("%c", &conf);
+if (conf == 'S'){
+memset(&excluir, 0, sizeof (struct cliente)); 
+printf("\nProduto excluido com Sucesso! \n");
+fseek(Arquivo,sizeof(struct cliente)*-1, SEEK_CUR);
+fwrite(&excluir, sizeof(excluir), 1, Arquivo);
+fseek(Arquivo, sizeof(excluir)* 0, SEEK_END);
+}
+else if (conf == 'N')
+printf("Ação cancelada!");
+}
+}
+
+if (!encon)
+printf ("\nCodigo nao cadastrado!!\n");
+}
+}while(cod!=0);
+}
