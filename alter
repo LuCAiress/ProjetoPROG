@@ -1,0 +1,61 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include<locale.h>
+#include<string.h>
+#include <conio.h>
+
+struct cliente {
+ int codigo; // codigo do sujeito
+ char nomecli[50]; // nome do sujeito
+ char telefone [15]; // fone do sujeito
+ char sexo; // sexo
+ char cpf[11];};
+
+int main(){
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
+    if (Arquivo == NULL){
+        printf("Arquivo inexistente!");  
+    }
+
+struct cliente alter;
+int cod, encon;
+do {
+printf ("\nDigite o codigo que deseja alterar: ");
+scanf ("%d", &cod);
+if(cod!=0){
+
+    while (fread (&alter, sizeof(alter), 1, Arquivo)){
+        if (cod == alter.codigo){
+    printf("Código do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",alter.codigo, alter.nomecli, alter.telefone, alter.sexo, alter.cpf);
+    encon = 1;
+
+    fseek(Arquivo,sizeof(struct cliente)*-1, SEEK_CUR);
+    printf("\nDigite o novo nome: ");
+    fflush(stdin);
+    gets(alter.nomecli);
+    fflush(stdin);
+    printf("\nDigite o novo telefone: ");
+    gets(alter.telefone);
+    fflush(stdin);
+ do {
+ printf(" \n Digite o Sexo [M ou F] : " );
+ alter.sexo = getche();
+ } while (alter.sexo != 'F' && alter.sexo != 'M');
+    fflush(stdin);
+    printf("\nDigite o CPF: ");
+    gets(alter.cpf);
+    fflush(stdin);
+
+fwrite (&alter, sizeof(alter), 1, Arquivo);
+fseek(Arquivo, sizeof(alter)* 0, SEEK_END);
+printf("Alteração feita com sucesso!");
+}
+}
+
+if (!encon){
+printf ("Codigo nao cadastrado!!\n");
+}
+}
+}while(cod!=0);
+}
