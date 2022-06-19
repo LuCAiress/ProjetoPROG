@@ -9,13 +9,16 @@ struct cliente {
  char nomecli[50]; 
  char telefone [15]; 
  char sexo; 
- char cpf[11];};
+ char cpf[11];
+ };
 struct produto{
 	int cdgprod;
 	char nome[50];
 	float preco;
 	int qtd;
 };
+
+
 
 
 int menu(void);
@@ -33,7 +36,13 @@ char Validaresp_produto();
 char listagem_cliente();
 void le_cliente (FILE * Arquivo);
 char listagem_produto();
- void le_produto (FILE * Arquivo);
+void le_produto (FILE * Arquivo);
+char consulta_cliente();
+char consulta_produto();
+char alterar_cliente();
+char alterar_produto();
+char excluir_cliente();
+char excluir_produto();
 int main(){
 	setlocale(LC_ALL,"Portuguese");
 	int opc=menu();
@@ -46,20 +55,32 @@ int main(){
 		break;
 		case 3:break;
 		case 4:
-		listagem_cliente();
+			listagem_cliente();
 		break;
 		case 5:
-		listagem_produto();
+			listagem_produto();
 		break;
 		case 6:break;
-		case 7:break;
-		case 8:break;
+		case 7:
+			consulta_cliente();
+		break;
+		case 8:
+			consulta_produto();
+		break;
 		case 9:break;
-		case 10:break;
-		case 11:break;
+		case 10:	
+			alterar_cliente();
+		break;
+		case 11:
+			alterar_produto();
+		break;
 		case 12:break;
-		case 13:break;
-		case 14:break;
+		case 13:
+			excluir_cliente();
+		break;
+		case 14:
+			excluir_produto();
+		break;
 		case 15:break;	
 		case 0:break;
 	}
@@ -69,27 +90,27 @@ int menu (void){
 
 int opcao;
 do {
-printf("\n\n      MENU PARA CADASTRO DE CLIENTE;PRODUTOS:COMPRAS E VENDAS       \n\n");
-printf("1. Incluir cliente\n");
-printf("2. Incluir produto\n");
-printf("3. Incluir compra/venda\n");
-printf("4. Listar  cliente \n");
-printf("5. Listar  produto \n");
-printf("6. Listar  compra/venda \n");
-printf("7. Consultar cliente\n");
-printf("8. Consultar produto\n");
-printf("9. Consultar compra/venda\n");
-printf("10. Alterar cliente\n");
-printf("11. Alterar produto\n");
-printf("12. Alterar compra/venda\n");
-printf("13. Excluir cliente\n");
-printf("14. Excluir produto\n");
-printf("15. Excluir compra/venda\n");
-printf("0. Sair\n\n");
-printf("Digite sua opção: ");
+printf("\n\n========Bem vindo ao Menu CRUD!========\n\n");
+printf("|1. Incluir cliente\n");
+printf("|2. Incluir produto\n");
+printf("|3. Incluir compra/venda\n");
+printf("|4. Listar  cliente \n");
+printf("|5. Listar  produto \n");
+printf("|6. Listar  compra/venda \n");
+printf("|7. Consultar cliente\n");
+printf("|8. Consultar produto\n");
+printf("|9. Consultar compra/venda\n");
+printf("|10. Alterar cliente\n");
+printf("|11. Alterar produto\n");
+printf("|12. Alterar compra/venda\n");
+printf("|13. Excluir cliente\n");
+printf("|14. Excluir produto\n");
+printf("|15. Excluir compra/venda\n");
+printf("|0. Sair\n\n");
+printf("\n==Digite uma opção: ");
 scanf("%d", &opcao);
 if ((opcao < 0) || (opcao > 15))
-printf ("Opção Digitada Não Existe!\n");
+printf ("\n>>>Opção digitada não existe!<<<\n");
 } while ((opcao < 0) || (opcao > 15));
 return opcao;
 }
@@ -101,11 +122,11 @@ char incluir_cliente(){
      char arqcli [] = {"CLIENTE.txt"};
 	 Arquivo = fopen(arqcli, "ab+");
   	 if (Arquivo == NULL) {
-	 printf(" \n Arquivo %s Nao existe : Tecle algo para criar agora ! ", arqcli);
+	 printf("\n>>>Arquivo %s não existe! Caso deseje prosseguir, tecle algo para criar um novo arquivo.<<<", arqcli);
  	getch();
 	 if ((Arquivo = fopen(arqcli, "wb+")) == NULL) {
 	 erro = 1;
- 	printf(" \n Erro grave ! Nao consigo criar o arquivo %s !!!", arqcli);
+ 	printf("\n>>>ERRO! Impossível criar o arquivo %s!<<<", arqcli);
 	 getch();
  }
  } 
@@ -120,27 +141,27 @@ void Entrada (FILE * Arquivo) {
  struct cliente novo;
  char vresp;
  do {
- printf("\n Digite o Codigo [Zero encerra] : " );
+ printf("\n==Digite o novo código (0 volta para o menu): ");
  scanf("%d", &novo.codigo);
  if (novo.codigo != 0) {
- printf(" \n Digite o nome : ");
+ printf("\n==Digite o nome do cliente: ");
  fflush(stdin);
  gets(novo.nomecli);
  novo.sexo = ValidaSexo();
- printf(" \n Digite o Telefone : " );
+ printf("\n==Digite o Telefone: " );
  gets(novo.telefone);
- printf(" \n Digite o cpf : ");
+ printf("\n==Digite o CPF: ");
  gets(novo.cpf);
  vresp = Validaresp();
  if (vresp == 'S') {
  retorno = fwrite (&novo, sizeof(struct cliente) ,1,Arquivo);
 
  if (retorno == 1) {
- printf(" \n Gravacao ok ! ");
+ printf("\n>>>Cliente cadastrado com sucesso!<<<");
  getch();
  }
  else {
- printf (" \n Problemas : Gravacao nao efetuada !!!" );
+ printf ("\n>>>ERRO: Não foi possível efetuar o cadastro!<<<");
  getch();
  }
  }
@@ -151,7 +172,7 @@ void Entrada (FILE * Arquivo) {
 char ValidaSexo() {
  char sexo;
  do {
- printf(" \n Digite o Sexo [M ou F] : " );
+ printf("\n==Digite o sexo [M para masculino e F para feminino]: ");
  sexo = getche();
  } while (sexo != 'F' && sexo != 'M');
  return sexo;
@@ -161,7 +182,7 @@ char Validaresp() {
 	
  char vresp;
  do {
- printf(" \n Confirma Inclusao [S ou N] ? " );
+ printf("\n==Você deseja criar este cadastro [S ou N]?" );
  vresp = getche();
  } while (vresp != 'S' && vresp != 'N');
  return vresp;
@@ -174,11 +195,11 @@ char incluir_produto(){
      char arqprod [] = {"PRODUTO.txt"};
 	 Arquivo = fopen(arqprod, "ab+");
   	 if (Arquivo == NULL) {
-	 printf(" \n Arquivo %s Nao existe : Tecle algo para criar agora ! ", arqprod);
+	 printf("\n>>>Arquivo %s não existe! Caso deseje prosseguir, tecle algo para criar um novo arquivo.<<<", arqprod);
  	getch();
 	 if ((Arquivo = fopen(arqprod, "wb+")) == NULL) {
 	 erro = 1;
- 	printf(" \n Erro grave ! Nao consigo criar o arquivo %s !!!", arqprod);
+ 	printf("\n>>>ERRO! Impossível criar o arquivo %s!<<<", arqprod);
 	 getch();
  }
  } 
@@ -193,23 +214,23 @@ void Entrada_produto(FILE *Arquivo){
 	char resp;
 	do{
 	
-	printf("adicione o código do produto;ZERO FINALIZA");
+	printf("\n==Digite o novo código (0 volta para o menu): ");
 	scanf("%d",&novo.cdgprod);
 	if(novo.cdgprod!=0){
-	printf("adicione o nome do produto\n");
+	printf("\n==Digite o nome do produto: ");
 	fflush(stdin);
 	gets(novo.nome);
-	printf("adicione o preço do produto\n");
+	printf("\n==Digite o preço: ");
 	scanf("%f",&novo.preco);
-	printf("adicione a quantidade do produto\n");
+	printf("\n==Digite a quantidade em estoque do produto: ");
 	scanf("%d",&novo.qtd);
 	resp=Validaresp();
 	if(resp=='S'){
 	retorno=fwrite(&novo,sizeof(struct produto),1,Arquivo);
 	if(retorno=1){
-	printf("gravação efetuada com sucesso\n");
+	printf("\n>>>Produto cadastrado com sucesso!<<<");
 }
-		else printf("houve um problema na gravação\n");
+		else printf("\n>>>ERRO: Não foi possível efetuar o cadastro!<<<");
 		getch();
 }
 }
@@ -218,7 +239,7 @@ void Entrada_produto(FILE *Arquivo){
 char Validaresp_produto() {
  char resp;
  do {
- printf(" \n Confirma Inclusao [S ou N] ? \n" );
+ printf("\n==Você deseja criar este cadastro [S ou N]?");
  resp = getche();
  } while (resp != 'S' && resp != 'N');
  return resp;
@@ -228,7 +249,7 @@ char listagem_cliente(){
 	int erro=0;
 	    FILE *Arquivo = fopen("CLIENTE.txt", "rb");
     if (Arquivo == NULL){
-        printf("Arquivo inexistente!");
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");
 		erro=1;  
     }
  	if(erro==0){
@@ -242,15 +263,15 @@ char listagem_cliente(){
 
  while ( retorno == 1) {
  cont++;
- printf("\n\n DADOS DO CLIENTE %d \n", cont);
- printf("\n Codigo : %d", ler.codigo);
- printf("\n Nome   : %s", ler.nomecli);
- printf("\n Sexo   : %c", ler.sexo);
- printf("\n Telefone   : %s", ler.telefone);
- printf("\n CPF : %s", ler.cpf);
+ printf("\n>>>DADOS DO CLIENTE %d<<<", cont);
+ printf("\n==Código: %d==", ler.codigo);
+ printf("\n==Nome: %s==", ler.nomecli);
+ printf("\n==Sexo: %c==", ler.sexo);
+ printf("\n==Telefone: %s==", ler.telefone);
+ printf("\n==CPF: %s==\n", ler.cpf);
  retorno = fread(&ler, sizeof(struct cliente), 1, Arquivo);
  }
- printf(" \n\n %d clientes cadastrados ", cont);
+ printf("\n\n>>>%d clientes cadastrados.<<<", cont);
  getch();
 } 
 
@@ -258,7 +279,7 @@ char listagem_produto(){
 	int erro=0;
     FILE *Arquivo = fopen("PRODUTO.txt", "rb");
     if (Arquivo == NULL){
-        printf("Arquivo inexistente!");
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");
 		erro=1;  
     }
  	if(erro==0){
@@ -272,59 +293,257 @@ char listagem_produto(){
 
  while ( retorno == 1) {
  cont++;
- printf("\n\n DADOS DO PRODUTO %d \n", cont);
- printf("\n Codigo : %d", ler.cdgprod);
- printf("\n Nome   : %s", ler.nome);
- printf("\n Sexo   : %.2f", ler.preco);
- printf("\n Telefone   : %d", ler.qtd);
+ printf("\n>>>DADOS DO PRODUTO %d<<<", cont);
+ printf("\n==Codigo: %d==", ler.cdgprod);
+ printf("\n==Nome: %s==", ler.nome);
+ printf("\n==Sexo: %.2f==", ler.preco);
+ printf("\n==Telefone: %d==\n", ler.qtd);
  retorno = fread(&ler, sizeof(struct produto), 1, Arquivo);
  }
- printf(" \n\n %d produtos cadastrados ", cont);
+ printf("\n\n>>>%d produtos cadastrados.<<<", cont);
  getch();
 } 
+char consulta_cliente(){
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "rb");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+    
+    struct cliente ler;
+    int cod, encon;
+    do {
+    rewind (Arquivo);
+    printf ("\n==Digite o codigo do cliente para consultá-lo: ");
+    encon=0;
+    scanf ("%d", &cod);
+    if(cod!=0){
+    while (fread (&ler, sizeof(ler), 1, Arquivo)){
+    if (cod == ler.codigo) {
+        encon = 1;
+        printf("==Código do cliente: %d==\n==Nome: %s==\n==Telefone: %s==\nSexo: %c==\n==CPF: %s==\n",ler.codigo, ler.nomecli, ler.telefone, ler.sexo, ler.cpf);
+        getch();
+        }
+    }
+    
+    if (!encon){
+        printf ("\n>>>Código inexistente!<<<");
+        getch();
+        }
+    }
+}while(cod!=0); 
+fclose(Arquivo);
+}
+char consulta_produto(){
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("PRODUTO.txt", "rb");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+    
+    struct produto ler;
+    int cod, encon;
+    do {
+    rewind (Arquivo);
+    printf ("\n==Digite o código do produto para consultá-lo: ");
+    encon=0;
+    scanf ("%d", &cod);
+    if(cod!=0){
+    while (fread (&ler, sizeof(ler), 1, Arquivo)){
+    if (cod == ler.cdgprod) {
+        encon = 1;
+        printf("\n==Código do produto: %d==\n==Nome: %s==\n==Preço: %s==\n==Quantidade: %d==\n",ler.cdgprod, ler.nome, ler.preco, ler.qtd);
+        getch();
+        }
+    }
+    
+    if (!encon){
+        printf ("\n>>>Código inexistente!<<<");
+        getch();
+        }
+    }
+}while(cod!=0); 
+fclose(Arquivo);
+}
 
+char alterar_cliente () {
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
 
+struct cliente alter;
+int cod, encon;
+do {
+rewind (Arquivo);
+printf ("\n==Digite o código que deseja alterar: ");
+encon=0;
+scanf ("%d", &cod);
+if(cod!=0){
 
+    while (fread (&alter, sizeof(alter), 1, Arquivo)){
+        if (cod == alter.codigo){
+    printf("\n==Código do cliente: %d==\n==Nome: %s==\n==Telefone: %s==\n==Sexo: %c==\n==CPF: %s==\n",alter.codigo, alter.nomecli, alter.telefone, alter.sexo, alter.cpf);
+    encon = 1;
 
+    fseek(Arquivo,sizeof(struct cliente)*-1, SEEK_CUR);
+    printf("\n==Digite o novo nome: ");
+    fflush(stdin);
+    gets(alter.nomecli);
+    fflush(stdin);
+    printf("\n==Digite o novo telefone: ");
+    gets(alter.telefone);
+    fflush(stdin);
+ do {
+ printf("\n==Digite o sexo [M para masculino e F para feminino]: ");
+ alter.sexo = getche();
+ } while (alter.sexo != 'F' && alter.sexo != 'M');
+    fflush(stdin);
+    printf("\n==Digite o CPF: ");
+    gets(alter.cpf);
+    fflush(stdin);
 
+fwrite (&alter, sizeof(alter), 1, Arquivo);
+fseek(Arquivo, sizeof(alter)* 0, SEEK_END);
+printf(">>>Alteração feita com sucesso!<<<");
+}
+}
 
+if (!encon){
+printf ("\n>>>Código inexistente!<<<");
+}
+}
+}while(cod!=0);
+}
 
+char alterar_produto() {
 
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("PRODUTO.txt", "rb+");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
 
+struct produto alter;
+int cod, encon;
+do {
+rewind (Arquivo);
+printf ("\n==Digite o código que deseja alterar: ");
+encon=0;
+scanf ("%d", &cod);
+if(cod!=0){
 
+    while (fread (&alter, sizeof(alter), 1, Arquivo)){
+        if (cod == alter.cdgprod){
+    printf("==Código do produto: %d==\n==Nome: %s==\n==Preço: %s==\n==Quantidade: %d==\n",alter.cdgprod, alter.nome, alter.preco, alter.qtd);
+    encon = 1;
 
+    fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
+    printf("\n==Digite o novo nome: ");
+    fflush(stdin);
+    gets(alter.nome);
+    fflush(stdin);
+    printf("\n==Digite o novo preço: ");
+    scanf("%f",&alter.preco);
+    fflush(stdin);
+    printf("\n==Digite a quantidade: ");
+    scanf("%d", &alter.qtd);
+    fflush(stdin);
 
+fwrite (&alter, sizeof(alter), 1, Arquivo);
+fseek(Arquivo, sizeof(alter)* 0, SEEK_END);
+printf(">>>Alteração feita com sucesso!<<<");
+}
+}
 
+if (!encon){
+printf ("\n>>>Código inexistente!<<<");
+}
+}
+}while(cod!=0);
+}
+char excluir_cliente() {
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+struct cliente excluir;    
+int cod, encon;
+char conf;
+do {
+    rewind (Arquivo);
+printf ("\n==Digite o codigo que deseja EXCLUIR: ");
+encon=0;
+scanf ("%d", &cod);
+if (cod!=0){
 
+while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
+if (cod == excluir.codigo){
+printf("==Código do cliente: %d==\n==Nome: %s==\n==Telefone: %s==\nSexo: %c==\n==CPF: %s==\n",excluir.codigo, excluir.nomecli, excluir.telefone, excluir.sexo, excluir.cpf);
+encon=1;
 
+printf("\n>>>Tem certeza que deseja excluir este cliente? [S/N]<<< ");
+fflush(stdin);
+scanf("%c", &conf);
+if (conf == 'S'){
+memset(&excluir, 0, sizeof (struct cliente)); 
 
+printf("\n>>>Cliente excluído com Sucesso!<<<");
+fseek(Arquivo,sizeof(struct cliente)*-1, SEEK_CUR);
+fwrite(&excluir, sizeof(excluir), 1, Arquivo);
+fseek(Arquivo, sizeof(excluir)* 0, SEEK_END);
+}
+else if (conf == 'N')
+printf("\n>>>Ação cancelada!<<<");
+}
+}
 
+if (!encon)
+printf ("\n>>>Código inexistente!<<<");
+}
+}while(cod!=0);
+}
+char excluir_produto() {
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+struct produto excluir;    
+int cod, encon;
+char conf;
+do {
+    rewind (Arquivo);
+printf ("\n==Digite o codigo que deseja EXCLUIR: ");
+encon=0;
+scanf ("%d", &cod);
+if (cod!=0){
 
+while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
+if (cod == excluir.cdgprod){
+printf("\n==Código do produto: %d==\n==Nome: %s==\n==Preço: %s==\n==Quantidade: %d==\n",excluir.cdgprod, excluir.nome, excluir.preco, excluir.qtd);
+encon=1;
 
+printf("\n>>>Tem certeza que deseja excluir este produto? [S/N]<<< ");
+fflush(stdin);
+scanf("%c", &conf);
+if (conf == 'S'){
+memset(&excluir, 0, sizeof (struct produto)); 
 
+printf("\n>>>Produto excluído com Sucesso!<<<");
+fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
+fwrite(&excluir, sizeof(excluir), 1, Arquivo);
+fseek(Arquivo, sizeof(excluir)* 0, SEEK_END);
+}
+else if (conf == 'N')
+printf("\n>>>Ação cancelada!<<<");
+}
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if (!encon)
+printf ("\n>>>Código inexistente!<<<");
+}
+}while(cod!=0);
+}
