@@ -21,13 +21,15 @@ int main(){
 struct cliente alter;
 int cod, encon;
 do {
+rewind (Arquivo);
 printf ("\nDigite o codigo que deseja alterar: ");
+encon=0;
 scanf ("%d", &cod);
 if(cod!=0){
 
     while (fread (&alter, sizeof(alter), 1, Arquivo)){
         if (cod == alter.codigo){
-    printf("Código do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",alter.codigo, alter.nomecli, alter.telefone, alter.sexo, alter.cpf);
+    printf("\nCódigo do cliente: %d\nNome: %s\nTelefone: %s\nSexo: %c\nCPF: %s\n",alter.codigo, alter.nomecli, alter.telefone, alter.sexo, alter.cpf);
     encon = 1;
 
     fseek(Arquivo,sizeof(struct cliente)*-1, SEEK_CUR);
@@ -54,7 +56,7 @@ printf("Alteração feita com sucesso!");
 }
 
 if (!encon){
-printf ("Codigo nao cadastrado!!\n");
+printf ("\nCodigo nao cadastrado!!\n");
 }
 }
 }while(cod!=0);
