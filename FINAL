@@ -44,6 +44,7 @@ void alterar_produto();
 void excluir_cliente();
 void excluir_produto();
 int main(){
+	system("color 1F");
 	setlocale(LC_ALL,"Portuguese");
 	int opc;
 	do {
@@ -133,6 +134,7 @@ void incluir_cliente(){
 	 erro = 1;
  	printf("\n>>>ERRO! Impossível criar o arquivo %s!<<<", arqcli);
 	 getch();
+	 return;
  }
  } 
  	if(erro==0){
@@ -206,10 +208,11 @@ void incluir_produto(){
 	 erro = 1;
  	printf("\n>>>ERRO! Impossível criar o arquivo %s!<<<", arqprod);
 	 getch();
+	 return;
  }
  } 
  	if(erro==0){
- 		Entrada(Arquivo);
+ 		Entrada_produto(Arquivo);
  		fclose (Arquivo);
 	 }	
  }
@@ -254,7 +257,9 @@ void listagem_cliente(){
 	int erro=0;
 	    FILE *Arquivo = fopen("CLIENTE.txt", "rb");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+        getch();
+		return;
 		erro=1;  
     }
  	if(erro==0){
@@ -284,8 +289,10 @@ void listagem_produto(){
 	int erro=0;
     FILE *Arquivo = fopen("PRODUTO.txt", "rb");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");
-		erro=1;  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+		erro=1;
+		getch();
+		return;   
     }
  	if(erro==0){
  	 le_produto(Arquivo);
@@ -301,8 +308,8 @@ void listagem_produto(){
  printf("\n>>>DADOS DO PRODUTO %d<<<", cont);
  printf("\n==Codigo: %d==", ler.cdgprod);
  printf("\n==Nome: %s==", ler.nome);
- printf("\n==Sexo: %.2f==", ler.preco);
- printf("\n==Telefone: %d==\n", ler.qtd);
+ printf("\n==Preço: %.2f==", ler.preco);
+ printf("\n==Quantidade: %d==\n", ler.qtd);
  retorno = fread(&ler, sizeof(struct produto), 1, Arquivo);
  }
  printf("\n\n>>>%d produtos cadastrados.<<<", cont);
@@ -312,7 +319,9 @@ void consulta_cliente(){
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("CLIENTE.txt", "rb");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+		getch();
+		return;   
     }
     
     struct cliente ler;
@@ -343,7 +352,9 @@ void consulta_produto(){
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("PRODUTO.txt", "rb");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+        getch();
+		return;  
     }
     
     struct produto ler;
@@ -375,7 +386,9 @@ void alterar_cliente () {
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+		getch();
+		return;   
     }
 
 struct cliente alter;
@@ -427,7 +440,9 @@ void alterar_produto() {
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("PRODUTO.txt", "rb+");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+        getch();
+		return;	  
     }
 
 struct produto alter;
@@ -472,7 +487,9 @@ void excluir_cliente() {
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+		getch();
+		return;  
     }
 struct cliente excluir;    
 int cod, encon;
@@ -514,7 +531,9 @@ void excluir_produto() {
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
     if (Arquivo == NULL){
-        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+        printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
+		getch();
+		return;  
     }
 struct produto excluir;    
 int cod, encon;
