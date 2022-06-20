@@ -45,9 +45,11 @@ void excluir_cliente();
 void excluir_produto();
 int main(){
 	setlocale(LC_ALL,"Portuguese");
-	int opc=menu();
+	int opc;
+	do {
+	system("cls");	
+	opc=menu();
 	switch(opc){
-		do {
 		case 1:
 			incluir_cliente();
 		break;
@@ -84,8 +86,8 @@ int main(){
 		break;
 		case 15:break;	
 		case 0:break;
-	}while(opc!=0);
-	}	
+	}
+	}while(opc!=0);	
 }
 
 
