@@ -275,6 +275,8 @@ void listagem_cliente(){
 
  while ( retorno == 1) {
  cont++;
+ if(ler.codigo>=1){
+ 
  printf("\n>>>DADOS DO CLIENTE %d<<<", cont);
  printf("\n==Código: %d==", ler.codigo);
  printf("\n==Nome: %s==", ler.nomecli);
@@ -285,6 +287,7 @@ void listagem_cliente(){
  }
  printf("\n\n>>>%d clientes cadastrados.<<<", cont);
  getch();
+}
 } 
 
 void listagem_produto(){
@@ -304,8 +307,8 @@ void listagem_produto(){
  int retorno, cont = 0;
  struct produto ler;
  retorno = fread(&ler, sizeof(struct produto), 1, Arquivo);
-
  while ( retorno == 1) {
+  if(ler.cdgprod>=1){
  cont++;
  printf("\n>>>DADOS DO PRODUTO %d<<<", cont);
  printf("\n==Codigo: %d==", ler.cdgprod);
@@ -316,6 +319,7 @@ void listagem_produto(){
  }
  printf("\n\n>>>%d produtos cadastrados.<<<", cont);
  getch();
+}
 } 
 void consulta_cliente(){
 	setlocale(LC_ALL,"Portuguese");
@@ -513,6 +517,7 @@ fflush(stdin);
 scanf("%c", &conf);
 if (conf == 'S'){
 memset(&excluir, 0, sizeof (struct cliente)); 
+excluir.codigo=NULL;
 
 printf("\n>>>Cliente excluído com Sucesso!<<<");
 fseek(Arquivo,sizeof(struct cliente)*-1, SEEK_CUR);
@@ -556,7 +561,8 @@ printf("\n>>>Tem certeza que deseja excluir este produto? [S/N]<<< ");
 fflush(stdin);
 scanf("%c", &conf);
 if (conf == 'S'){
-memset(&excluir, 0, sizeof (struct produto)); 
+memset(&excluir, 0, sizeof (struct produto));
+
 
 printf("\n>>>Produto excluído com Sucesso!<<<");
 fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
