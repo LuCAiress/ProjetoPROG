@@ -535,7 +535,7 @@ printf ("\n>>>Código inexistente!<<<");
 }
 void excluir_produto() {
 	setlocale(LC_ALL,"Portuguese");
-    FILE *Arquivo = fopen("CLIENTE.txt", "rb+");
+    FILE *Arquivo = fopen("PRODUTO.txt", "rb+");
     if (Arquivo == NULL){
         printf("\n>>>O arquivo para leitura não foi encontrado!<<<");
 		getch();
