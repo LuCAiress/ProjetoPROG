@@ -275,7 +275,7 @@ void listagem_cliente(){
 
  while ( retorno == 1) {
  cont++;
- if(ler.codigo>=1){
+
  
  printf("\n>>>DADOS DO CLIENTE %d<<<", cont);
  printf("\n==Código: %d==", ler.codigo);
@@ -284,7 +284,7 @@ void listagem_cliente(){
  printf("\n==Telefone: %s==", ler.telefone);
  printf("\n==CPF: %s==\n", ler.cpf);
  retorno = fread(&ler, sizeof(struct cliente), 1, Arquivo);
- }
+ 
  printf("\n\n>>>%d clientes cadastrados.<<<", cont);
  getch();
 }
@@ -308,7 +308,7 @@ void listagem_produto(){
  struct produto ler;
  retorno = fread(&ler, sizeof(struct produto), 1, Arquivo);
  while ( retorno == 1) {
-  if(ler.cdgprod>=1){
+
  cont++;
  printf("\n>>>DADOS DO PRODUTO %d<<<", cont);
  printf("\n==Codigo: %d==", ler.cdgprod);
@@ -316,7 +316,6 @@ void listagem_produto(){
  printf("\n==Preço: %.2f==", ler.preco);
  printf("\n==Quantidade: %d==\n", ler.qtd);
  retorno = fread(&ler, sizeof(struct produto), 1, Arquivo);
- }
  printf("\n\n>>>%d produtos cadastrados.<<<", cont);
  getch();
 }
