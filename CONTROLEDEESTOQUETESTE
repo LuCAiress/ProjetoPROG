@@ -1,3 +1,4 @@
+
 #include <stdlib.h>
 #include <stdio.h>
 #include<locale.h>
@@ -34,7 +35,7 @@ struct compra_venda{
  } while (vresp != 'S' && vresp != 'N');
  return vresp;
 }
-
+void entrada_compra (FILE * Arquivo, FILE *Arquivo1);
 int main(){
 
  FILE * Arquivo;
@@ -75,7 +76,6 @@ fread (&est, sizeof(est),1,Arquivo1);
  gets(novo.nomecli);
  printf("\n==Digite o nome do vendedor: " );
  gets(novo.nomevendedor);
-
  
  printf("\n==Digite o código do produto vendido: ");
  scanf("%d",&novo.produtovendido);
@@ -87,7 +87,7 @@ if (est.qtd==0){
 }
 printf("\n==Digite a quantidade vendida: ");
  scanf("%d", &novo.qtd);
-qtd=novo.qtd;
+est.qtd=est.cdgprod-*novo.qtd;
 
  if(est.qtd<0){
     printf("\n>>>ERRO! Impossível vender mais que o estoque do produto!<<<");
