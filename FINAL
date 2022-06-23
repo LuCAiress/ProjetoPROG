@@ -17,7 +17,14 @@ struct produto{
 	float preco;
 	int qtd;
 };
-
+struct compra_venda{
+ int codigo_cv; 
+ char nomecli[50];
+ char nomevendedor[50]; 
+ char produtovendido[15]; 
+ int qtd[]; 
+ 
+ };
 
 
 
@@ -43,6 +50,14 @@ void alterar_cliente();
 void alterar_produto();
 void excluir_cliente();
 void excluir_produto();
+void incluir_compra();
+void entrada_compra (FILE * Arquivo);
+void listagem_compra();
+void le_compra (FILE * Arquivo);
+void consulta_compra(); 
+void alterar_compra (); 
+void excluir_compra();
+ 
 int main(){
 	system("color 1F");
 	setlocale(LC_ALL,"Portuguese");
@@ -57,35 +72,45 @@ int main(){
 		case 2:
 			incluir_produto();
 		break;
-		case 3:break;
+		case 3:
+			incluir_compra();
+		break;
 		case 4:
 			listagem_cliente();
 		break;
 		case 5:
 			listagem_produto();
 		break;
-		case 6:break;
+		case 6:
+			listagem_compra();
+		break;
 		case 7:
 			consulta_cliente();
 		break;
 		case 8:
 			consulta_produto();
 		break;
-		case 9:break;
+		case 9:
+			consulta_compra(); 
+		break;
 		case 10:	
 			alterar_cliente();
 		break;
 		case 11:
 			alterar_produto();
 		break;
-		case 12:break;
+		case 12:
+			alterar_compra (); 
+		break;
 		case 13:
 			excluir_cliente();
 		break;
 		case 14:
 			excluir_produto();
 		break;
-		case 15:break;	
+		case 15:
+			excluir_compra();
+		break;	
 		case 0:break;
 	}
 	}while(opc!=0);	
@@ -540,6 +565,219 @@ memset(&excluir, 0, sizeof (struct produto));
 
 printf("\n>>>Produto excluído com Sucesso!<<<");
 fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
+fwrite(&excluir, sizeof(excluir), 1, Arquivo);
+fseek(Arquivo, sizeof(excluir)* 0, SEEK_END);
+}
+else if (conf == 'N')
+printf("\n>>>Ação cancelada!<<<");
+}
+}
+
+if (!encon)
+printf ("\n>>>Código inexistente!<<<");
+}
+}while(cod!=0);
+}
+
+
+void incluir_compra(){
+
+ FILE * Arquivo;
+ 	int erro=0;
+     char arqcv [] = {"COMPRA.txt"};
+	 Arquivo = fopen(arqcv, "ab+");
+  	 if (Arquivo == NULL) {
+	 printf("\n>>>Arquivo %s não existe! Caso deseje prosseguir, tecle algo para criar um novo arquivo.<<<", arqcv);
+ 	getch();
+	 if ((Arquivo = fopen(arqcv, "wb+")) == NULL) {
+	 erro = 1;
+ 	printf("\n>>>ERRO! Impossível criar o arquivo %s!<<<", arqcv);
+	 getch();
+ }
+ } 
+ 	if(erro==0){
+ 		entrada_compra(Arquivo);
+ 		fclose (Arquivo);
+	 }	
+ }
+ 
+void entrada_compra (FILE * Arquivo) {
+ int retorno;
+ struct compra_venda novo;
+ char vresp;
+ int qtd;
+ do {
+ printf("\n==Digite o código da compra (0 volta para o menu): ");
+ scanf("%d", &novo.codigo_cv);
+ if (novo.codigo_cv != 0) {
+ printf("\n==Digite o nome do cliente: ");
+ fflush(stdin);
+ gets(novo.nomecli);
+ printf("\n==Digite o nome do vendedor: " );
+ gets(novo.nomevendedor);
+ printf("\n==Digite a quantidade de produtos vendidos: ");
+ scanf("%d",&qtd);
+ for(int i=0;i<qtd;i++){
+ 
+ printf("\n==Digite o produto vendido: ");
+ gets(novo.produtovendido);
+  printf("\n==Digite a quantidade vendida: ");
+ scanf("%d", &novo.qtd[i]);
+ }
+ vresp = Validaresp();
+ if (vresp == 'S') {
+ retorno = fwrite (&novo, sizeof(struct compra_venda) ,1,Arquivo);
+
+ if (retorno == 1) {
+ printf("\n>>>Compra cadastrada com sucesso!<<<");
+ getch();
+ }
+ else {
+ printf ("\n>>>ERRO: Não foi possível efetuar o cadastro!<<<");
+ getch();
+ }
+ }
+ }
+ } while (novo.codigo_cv != 0);
+}
+void listagem_compra(){
+	int erro=0;
+	    FILE *Arquivo = fopen("COMPRA.txt", "rb");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");
+		erro=1;  
+    }
+ 	if(erro==0){
+ 	 le_compra(Arquivo);
+	 }	
+ }
+
+ void le_compra (FILE * Arquivo) {
+ int retorno, cont = 0;
+ struct compra_venda ler;
+ retorno = fread(&ler, sizeof(struct compra_venda), 1, Arquivo);
+
+ while ( retorno == 1) {
+ cont++;
+ printf("\n>>>DADOS De COMPRA %d<<<", cont);
+ printf("\n==Código: %d==", ler.codigo_cv);
+ printf("\n==Nome Cliente: %s==", ler.nomecli);
+ printf("\n==Nome Vendedor: %s==", ler.nomevendedor);
+ printf("\n==Produto Vendido: %s==", ler.produtovendido);
+ printf("\n==Quantidade : %d==\n", ler.qtd);
+ retorno = fread(&ler, sizeof(struct compra_venda), 1, Arquivo);
+ }
+ printf("\n\n>>>%d compras cadastradas.<<<", cont);
+ getch();
+} 
+void consulta_compra(){
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("COMPRA.txt", "rb");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+    
+    struct compra_venda ler;
+    int cod, encon;
+    do {
+    rewind (Arquivo);
+    printf ("\n==Digite o código de compra para consultá-lo: ");
+    encon=0;
+    scanf ("%d", &cod);
+    if(cod!=0){
+    while (fread (&ler, sizeof(ler), 1, Arquivo)){
+    if (cod == ler.codigo_cv) {
+        encon = 1;
+        printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nProduto Vendido: %s==\n==Quantidade: %d==\n",ler.codigo_cv, ler.nomecli, ler.nomevendedor, ler.produtovendido , ler.qtd);
+        getch();
+        }
+    }
+    
+    if (!encon){
+        printf ("\n>>>Código inexistente!<<<");
+        getch();
+        }
+    }
+}while(cod!=0); 
+fclose(Arquivo);
+}
+
+void alterar_compra () {
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("COMPRA.txt", "rb+");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+
+struct compra_venda alter;
+int cod, encon;
+do {
+rewind (Arquivo);
+printf ("\n==Digite o código que deseja alterar: ");
+encon=0;
+scanf ("%d", &cod);
+if(cod!=0){
+
+    while (fread (&alter, sizeof(alter), 1, Arquivo)){
+        if (cod == alter.codigo_cv){
+      printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nProduto Vendido: %s==\n==Quantidade: %d==\n",alter.codigo_cv, alter.nomecli, alter.nomevendedor, alter.produtovendido , alter.qtd);
+    encon = 1;
+
+    fseek(Arquivo,sizeof(struct compra_venda)*-1, SEEK_CUR);
+    printf("\n==Digite o novo nome do cliente: ");
+    fflush(stdin);
+    gets(alter.nomecli);
+    fflush(stdin);
+    printf("\n==Digite o novo nome do vendedor: ");
+    gets(alter.nomevendedor);
+    fflush(stdin);
+	printf("\n==Digite o novo produtovendido");
+	gets(alter.produtovendido);
+    fflush(stdin);
+    printf("\n==Digite a Quantidade: ");
+    scanf("%d",&alter.qtd);
+    fflush(stdin);
+
+fwrite (&alter, sizeof(alter), 1, Arquivo);
+fseek(Arquivo, sizeof(alter)* 0, SEEK_END);
+printf(">>>Alteração feita com sucesso!<<<");
+}
+}
+if (!encon){
+printf ("\n>>>Código inexistente!<<<");
+}
+}
+}while(cod!=0);
+}
+void excluir_compra() {
+	setlocale(LC_ALL,"Portuguese");
+    FILE *Arquivo = fopen("COMPRA.txt", "rb+");
+    if (Arquivo == NULL){
+        printf(">>>O arquivo para leitura não foi encontrado!<<<");  
+    }
+struct compra_venda excluir;    
+int cod, encon;
+char conf;
+do {
+    rewind (Arquivo);
+printf ("\n==Digite o codigo que deseja EXCLUIR: ");
+encon=0;
+scanf ("%d", &cod);
+if (cod!=0){
+
+while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
+if (cod == excluir.codigo_cv){
+ printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nProduto Vendido: %s==\n==Quantidade: %d==\n",excluir.codigo_cv, excluir.nomecli, excluir.nomevendedor, excluir.produtovendido , excluir.qtd);
+encon=1;
+
+printf("\n>>>Tem certeza que deseja excluir esta compra? [S/N]<<< ");
+fflush(stdin);
+scanf("%c", &conf);
+if (conf == 'S'){
+memset(&excluir, 0, sizeof (struct compra_venda)); 
+
+printf("\n>>>Compra excluída com Sucesso!<<<");
+fseek(Arquivo,sizeof(struct compra_venda)*-1, SEEK_CUR);
 fwrite(&excluir, sizeof(excluir), 1, Arquivo);
 fseek(Arquivo, sizeof(excluir)* 0, SEEK_END);
 }
