@@ -21,25 +21,21 @@ struct compra_venda{
  int codigo_cv; 
  char nomecli[50];
  char nomevendedor[50]; 
- char produtovendido[15]; 
- int qtd[]; 
- 
+ int codigo_produto; 
+ int qtd; 
+ int preco;
+ int preco_total;
  };
-
 
 
 int menu(void);
 void incluir_cliente();
-
 void Entrada (FILE *cliente);
 char ValidaSexo();
 char Validaresp();
-
 void incluir_produto();
-
 void Entrada_produto(FILE *Arquivo);
 char Validaresp_produto();
-
 void listagem_cliente();
 void le_cliente (FILE * Arquivo);
 void listagem_produto();
@@ -51,7 +47,7 @@ void alterar_produto();
 void excluir_cliente();
 void excluir_produto();
 void incluir_compra();
-void entrada_compra (FILE * Arquivo);
+void entrada_compra (FILE * Arquivo,FILE * Arquivo1);
 void listagem_compra();
 void le_compra (FILE * Arquivo);
 void consulta_compra(); 
@@ -294,8 +290,6 @@ void listagem_cliente(){
 
  while ( retorno == 1) {
  cont++;
- if(ler.codigo!=0){
- 
  printf("\n>>>DADOS DO CLIENTE %d<<<", cont);
  printf("\n==Código: %d==", ler.codigo);
  printf("\n==Nome: %s==", ler.nomecli);
@@ -303,11 +297,10 @@ void listagem_cliente(){
  printf("\n==Telefone: %s==", ler.telefone);
  printf("\n==CPF: %s==\n", ler.cpf);
  retorno = fread(&ler, sizeof(struct cliente), 1, Arquivo);
- }}
+ }
  printf("\n\n>>>%d clientes cadastrados.<<<", cont);
  getch();
 } 
-
 
 void listagem_produto(){
 	int erro=0;
@@ -586,12 +579,19 @@ printf ("\n>>>Código inexistente!<<<");
 void incluir_compra(){
 
  FILE * Arquivo;
+ 	FILE *Arquivo1;
  	int erro=0;
      char arqcv [] = {"COMPRA.txt"};
+     char arqprod [] = {"PRODUTO.txt"};
 	 Arquivo = fopen(arqcv, "ab+");
+	 Arquivo1 = fopen(arqprod,"rb+");
   	 if (Arquivo == NULL) {
 	 printf("\n>>>Arquivo %s não existe! Caso deseje prosseguir, tecle algo para criar um novo arquivo.<<<", arqcv);
  	getch();
+ 	if(Arquivo1 == NULL){
+			printf("Erro abertura do Arquivo : %s. Tecle algo !\n",arqprod);
+			getch();
+		}
 	 if ((Arquivo = fopen(arqcv, "wb+")) == NULL) {
 	 erro = 1;
  	printf("\n>>>ERRO! Impossível criar o arquivo %s!<<<", arqcv);
@@ -599,14 +599,16 @@ void incluir_compra(){
  }
  } 
  	if(erro==0){
- 		entrada_compra(Arquivo);
+ 		entrada_compra(Arquivo,Arquivo1);
  		fclose (Arquivo);
+ 		fclose(Arquivo1);
 	 }	
  }
  
-void entrada_compra (FILE * Arquivo) {
+void entrada_compra (FILE * Arquivo, FILE * Arquivo1) {
  int retorno;
  struct compra_venda novo;
+ struct produto M;
  char vresp;
  int qtd;
  do {
@@ -620,14 +622,41 @@ void entrada_compra (FILE * Arquivo) {
  gets(novo.nomevendedor);
  printf("\n==Digite a quantidade de produtos vendidos: ");
  scanf("%d",&qtd);
- for(int i=0;i<qtd;i++){
  
- printf("\n==Digite o produto vendido: ");
- gets(novo.produtovendido);
-  printf("\n==Digite a quantidade vendida: ");
- scanf("%d", &novo.qtd[i]);
- }
- vresp = Validaresp();
+ 		rewind(Arquivo1);
+ 	printf("\n==Digite o codigo do produto vendido: ");
+ 	scanf("%d",&novo.codigo_produto);
+		while(fread(&M,sizeof(struct produto),1,Arquivo1)){
+			if(novo.codigo_produto==M.cdgprod){			
+				printf("\n==Digite a quantidade vendida: ");
+				scanf("%d", &novo.qtd);
+				printf("\n==Digite o preço do produto: ");
+				scanf("%d",&novo.preco);
+		int qnt_estoque = (M.qtd);
+		int qnt_desejada =(novo.qtd);
+		qnt_estoque = qnt_estoque - qnt_desejada;
+		
+	if(qnt_estoque >= 0){
+		
+		novo.preco=novo.preco*qtd;
+		printf("\nO preço total da venda é: %d",novo.preco_total);
+	Validaresp();
+	retorno=fwrite(&M,sizeof(struct produto),1,Arquivo1);
+	if(retorno=1){
+		M.qtd==qnt_estoque;
+	}
+	}
+	else{
+	printf("\n\nQuantidade não disponivel em estoque!\n\nVoltando ao menu");
+	fflush(stdin);
+	getch();
+	return ;
+		}
+}
+}
+}
+}while(novo.codigo_cv!=0);
+vresp=Validaresp();{
  if (vresp == 'S') {
  retorno = fwrite (&novo, sizeof(struct compra_venda) ,1,Arquivo);
 
@@ -640,9 +669,10 @@ void entrada_compra (FILE * Arquivo) {
  getch();
  }
  }
- }
- } while (novo.codigo_cv != 0);
 }
+}
+
+
 void listagem_compra(){
 	int erro=0;
 	    FILE *Arquivo = fopen("COMPRA.txt", "rb");
@@ -666,7 +696,7 @@ void listagem_compra(){
  printf("\n==Código: %d==", ler.codigo_cv);
  printf("\n==Nome Cliente: %s==", ler.nomecli);
  printf("\n==Nome Vendedor: %s==", ler.nomevendedor);
- printf("\n==Produto Vendido: %s==", ler.produtovendido);
+ printf("\n==Codigo do Produto Vendido: %d==", ler.codigo_produto);
  printf("\n==Quantidade : %d==\n", ler.qtd);
  retorno = fread(&ler, sizeof(struct compra_venda), 1, Arquivo);
  }
@@ -691,7 +721,7 @@ void consulta_compra(){
     while (fread (&ler, sizeof(ler), 1, Arquivo)){
     if (cod == ler.codigo_cv) {
         encon = 1;
-        printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nProduto Vendido: %s==\n==Quantidade: %d==\n",ler.codigo_cv, ler.nomecli, ler.nomevendedor, ler.produtovendido , ler.qtd);
+        printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nCodigo do Produto Vendido: %d==\n==Quantidade: %d==\n",ler.codigo_cv, ler.nomecli, ler.nomevendedor, ler.codigo_produto , ler.qtd);
         getch();
         }
     }
@@ -723,7 +753,7 @@ if(cod!=0){
 
     while (fread (&alter, sizeof(alter), 1, Arquivo)){
         if (cod == alter.codigo_cv){
-      printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nProduto Vendido: %s==\n==Quantidade: %d==\n",alter.codigo_cv, alter.nomecli, alter.nomevendedor, alter.produtovendido , alter.qtd);
+      printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nCodigo do Produto Vendido: %d==\n==Quantidade: %d==\n",alter.codigo_cv, alter.nomecli, alter.nomevendedor, alter.codigo_produto , alter.qtd);
     encon = 1;
 
     fseek(Arquivo,sizeof(struct compra_venda)*-1, SEEK_CUR);
@@ -735,7 +765,7 @@ if(cod!=0){
     gets(alter.nomevendedor);
     fflush(stdin);
 	printf("\n==Digite o novo produtovendido");
-	gets(alter.produtovendido);
+	scanf("%d",&alter.codigo_produto);
     fflush(stdin);
     printf("\n==Digite a Quantidade: ");
     scanf("%d",&alter.qtd);
@@ -770,7 +800,7 @@ if (cod!=0){
 
 while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
 if (cod == excluir.codigo_cv){
- printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nProduto Vendido: %s==\n==Quantidade: %d==\n",excluir.codigo_cv, excluir.nomecli, excluir.nomevendedor, excluir.produtovendido , excluir.qtd);
+ printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nCodigo do Produto Vendido: %d==\n==Quantidade: %d==\n",excluir.codigo_cv, excluir.nomecli, excluir.nomevendedor, excluir.codigo_produto , excluir.qtd);
 encon=1;
 
 printf("\n>>>Tem certeza que deseja excluir esta compra? [S/N]<<< ");
