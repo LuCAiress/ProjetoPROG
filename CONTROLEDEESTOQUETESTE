@@ -23,6 +23,7 @@ struct compra_venda{
  char nomevendedor[50]; 
  int codigoprod; 
  int qtd; 
+ 
  };
 
 
@@ -56,6 +57,7 @@ void alterar_compra ();
 void excluir_compra();
 void listagem_compra();
  void le_compra (FILE * Arquivo);
+ void controle_estoque(FILE *Arquivo,FILE * Arquivo1);
 int main(){
 	system("color 1F");
 	setlocale(LC_ALL,"Portuguese");
@@ -65,48 +67,63 @@ int main(){
 	opc=menu();
 	switch(opc){
 		case 1:
+			system("cls");
 			incluir_cliente();
 		break;
 		case 2:
+			system("cls");
 			incluir_produto();
 		break;
 		case 3:
+			system("cls");
 			incluir_compra();
 		break;
 		case 4:
+			system("cls");
 			listagem_cliente();
 		break;
 		case 5:
+			system("cls");
 			listagem_produto();
 		break;
 		case 6:
+			system("cls");
 			listagem_compra();
 		break;
 		case 7:
+			system("cls");
 			consulta_cliente();
 		break;
 		case 8:
+			system("cls");
 			consulta_produto();
 		break;
 		case 9:
+			system("cls");
 			consulta_compra();
 		break;
-		case 10:	
+		case 10:
+			system("cls");	
 			alterar_cliente();
 		break;
 		case 11:
+			system("cls");
 			alterar_produto();
 		break;
 		case 12:
+			system("cls");
 			alterar_compra ();
 		break;
 		case 13:
+			system("cls");
 			excluir_cliente();
 		break;
 		case 14:
+			system("cls");
 			excluir_produto();
 		break;
 		case 15:
+			system("cls");
 			excluir_compra();
 		break;	
 		case 0:break;
@@ -367,7 +384,7 @@ void consulta_cliente(){
     int cod, encon;
     do {
     rewind (Arquivo);
-    printf ("\n==Digite o codigo do cliente para consultá-lo: ");
+    printf ("\n==Digite o código do produto para consultá-lo (0 volta pro menu): ");
     encon=0;
     scanf ("%d", &cod);
 	fflush(stdin);
@@ -401,7 +418,7 @@ void consulta_produto(){
     int cod, encon;
     do {
     rewind (Arquivo);
-    printf ("\n==Digite o código do produto para consultá-lo: ");
+    printf ("\n==Digite o código do produto para consultá-lo (0 volta pro menu): ");
     encon=0;
     scanf ("%d", &cod);
 	fflush(stdin);
@@ -409,7 +426,7 @@ void consulta_produto(){
     while (fread (&ler, sizeof(ler), 1, Arquivo)){
     if (cod == ler.cdgprod) {
         encon = 1;
-        printf("\n==Código do produto: %d==\n==Nome: %s==\n==Preço: %s==\n==Quantidade: %d==\n",ler.cdgprod, ler.nome, ler.preco, ler.qtd);
+        printf("\n==Código do produto: %d==\n==Nome: %s==\n==Preço: %f==\n==Quantidade: %d==\n",ler.cdgprod, ler.nome, ler.preco, ler.qtd);
         getch();
         }
     }
@@ -436,7 +453,7 @@ struct cliente alter;
 int cod, encon;
 do {
 rewind (Arquivo);
-printf ("\n==Digite o código que deseja alterar: ");
+printf ("\n==Digite o código que deseja alterar (0 volta pro menu): ");
 encon=0;
 scanf ("%d", &cod);
 fflush(stdin);
@@ -491,7 +508,7 @@ struct produto alter;
 int cod, encon;
 do {
 rewind (Arquivo);
-printf ("\n==Digite o código que deseja alterar: ");
+printf ("\n==Digite o código que deseja alterar (0 volta pro menu): ");
 encon=0;
 scanf ("%d", &cod);
 fflush(stdin);
@@ -499,7 +516,7 @@ if(cod!=0){
 
     while (fread (&alter, sizeof(alter), 1, Arquivo)){
         if (cod == alter.cdgprod){
-    printf("==Código do produto: %d==\n==Nome: %s==\n==Preço: %s==\n==Quantidade: %d==\n",alter.cdgprod, alter.nome, alter.preco, alter.qtd);
+    printf("==Código do produto: %d==\n==Nome: %s==\n==Preço: %f==\n==Quantidade: %d==\n",alter.cdgprod, alter.nome, alter.preco, alter.qtd);
     encon = 1;
 
     fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
@@ -539,7 +556,7 @@ int cod, encon;
 char conf;
 do {
     rewind (Arquivo);
-printf ("\n==Digite o codigo que deseja EXCLUIR: ");
+printf ("\n==Digite o codigo que deseja EXCLUIR (0 volta pro menu): ");
 encon=0;
 scanf ("%d", &cod);
 fflush(stdin);
@@ -584,7 +601,7 @@ int cod, encon;
 char conf;
 do {
     rewind (Arquivo);
-printf ("\n==Digite o codigo que deseja EXCLUIR: ");
+printf ("\n==Digite o codigo que deseja EXCLUIR (0 volta pro menu): ");
 encon=0;
 scanf ("%d", &cod);
 fflush(stdin);
@@ -592,7 +609,7 @@ if (cod!=0){
 
 while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
 if (cod == excluir.cdgprod){
-printf("\n==Código do produto: %d==\n==Nome: %s==\n==Preço: %f==\n==Quantidade: %d==\n",excluir.cdgprod, excluir.nome, excluir.preco, excluir.qtd);
+printf("\n==C?digo do produto: %d==\n==Nome: %s==\n==Preço: %f==\n==Quantidade: %d==\n",excluir.cdgprod, excluir.nome, excluir.preco, excluir.qtd);
 encon=1;
 
 printf("\n>>>Tem certeza que deseja excluir este produto? [S/N]<<< ");
@@ -623,7 +640,7 @@ void incluir_compra(){
 	 FILE * Arquivo1;
  	int erro=0;
      char arqcv [] = {"COMPRA.txt"};
-     char arqprod[] ={"PRODUTO.txt"};
+     char arqprod [] = {"PRODUTO.txt"};
 	 Arquivo = fopen(arqcv, "ab+");
 	 Arquivo1 = fopen(arqprod, "ab+");
   	 if (Arquivo == NULL) {
@@ -638,13 +655,12 @@ void incluir_compra(){
  	if(erro==0){
  		Entrada_compra(Arquivo,Arquivo1);
  		fclose (Arquivo);
- 		fclose(Arquivo1);
+ 		fclose (Arquivo1);
 	 }	
  }
-void Entrada_compra(FILE *Arquivo,FILE * Arquivo1){
+void Entrada_compra(FILE *Arquivo,FILE *Arquivo1){
 	int retorno;
 	struct compra_venda novo;
-	 struct produto est;
 	char resp;
 	do{
 	
@@ -665,72 +681,20 @@ void Entrada_compra(FILE *Arquivo,FILE * Arquivo1){
 	printf("\n==Digite o código do produto: ");
 	scanf("%d",&novo.codigoprod);
 	fflush(stdin);
-		rewind(Arquivo1);
-		while(fread(&est,sizeof(struct produto),1,Arquivo1)){
-			if(novo.codigoprod==est.cdgprod){			
-				
-		int qnt_estoque = (est.qtd);
-		int qnt_desejada =(novo.qtd);
-		qnt_estoque = qnt_estoque - qnt_desejada;
-
-
-
-		if(qnt_estoque >= 0){
-			
-		while(fwrite(&est,sizeof(struct produto),1,Arquivo1)){
-		fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
-		est.qtd==qnt_estoque;
-		fwrite (&est, sizeof(produto), 1, Arquivo);
-		fseek(Arquivo, sizeof(est)* 0, SEEK_END);
-		}
-	
-		Validaresp();
-		}	
-		else{
-	printf("\n\nQuantidade não disponivel em estoque!\n\nVoltando ao menu");
-	fflush(stdin);
-	getch();
-	return ;
-			}	
-	}
-	
-	
+	controle_estoque(Arquivo,Arquivo1);
 	resp=Validaresp();
 	if(resp=='S'){
-	retorno=fwrite(&novo,sizeof(struct produto),1,Arquivo);
+	retorno=fwrite(&novo,sizeof(struct compra_venda),1,Arquivo);
 	if(retorno=1){
 	printf("\n>>>Compra cadastrada com sucesso!<<<");
+	
 }
 		else printf("\n>>>ERRO: Não foi possível efetuar o cadastro!<<<");
 		getch();
 }
 }
-}	
 }while(novo.codigo_cv!=0);	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void listagem_compra(){
 	int erro=0;
 	    FILE *Arquivo = fopen("COMPRA.txt", "rb");
@@ -768,17 +732,6 @@ void listagem_compra(){
  printf("\n\n>>>%d compras cadastradas.<<<", cont);
  getch();
 } 
-
-
-
-
-
-
-
-
-
-
-
 void consulta_compra(){
 	setlocale(LC_ALL,"Portuguese");
     FILE *Arquivo = fopen("COMPRA.txt", "rb");
@@ -793,7 +746,7 @@ void consulta_compra(){
     int cod, encon;
     do {
     rewind (Arquivo);
-    printf ("\n==Digite o código de compra para consultá-lo: ");
+    printf ("\n==Digite o código do produto para consultá-lo (0 volta pro menu): ");
     encon=0;
     scanf ("%d", &cod);
 	fflush(stdin);
@@ -828,7 +781,7 @@ struct compra_venda alter;
 int cod, encon;
 do {
 rewind (Arquivo);
-printf ("\n==Digite o código que deseja alterar: ");
+printf ("\n==Digite o código do produto para alterar (0 volta pro menu): ");
 encon=0;
 scanf ("%d", &cod);
 fflush(stdin);
@@ -846,8 +799,8 @@ if(cod!=0){
     printf("\n==Digite o novo nome do vendedor: ");
     gets(alter.nomevendedor);
     fflush(stdin);
-	printf("\n==Digite o novo produtovendido");
-	scanf("%d", alter.codigoprod);
+	printf("\n==Digite o novo produto vendido: ");
+	scanf("%d", &alter.codigoprod);
     fflush(stdin);
     printf("\n==Digite a Quantidade: ");
     scanf("%d",&alter.qtd);
@@ -878,7 +831,7 @@ int cod, encon;
 char conf;
 do {
     rewind (Arquivo);
-printf ("\n==Digite o codigo que deseja EXCLUIR: ");
+printf ("\n==Digite o codigo que deseja EXCLUIR (0 volta pro menu): ");
 encon=0;
 scanf ("%d", &cod);
 fflush(stdin);
@@ -908,4 +861,40 @@ if (!encon)
 printf ("\n>>>Código inexistente!<<<");
 }
 }while(cod!=0);
+}
+
+
+
+void controle_estoque(FILE *Arquivo,FILE * Arquivo1){
+	struct compra_venda novo;
+	struct produto est;
+	while(fread(&est,sizeof(struct produto),1,Arquivo1) and fread(&novo,sizeof(struct compra_venda),1,Arquivo) ){
+			if(novo.codigoprod==est.cdgprod){			
+							
+							
+		int qnt_estoque = (est.qtd);
+		int qnt_desejada =(novo.qtd);
+		qnt_estoque = qnt_estoque - qnt_desejada;
+		
+	if(qnt_estoque >= 0){
+	while(fwrite(&est,sizeof(struct produto),1,Arquivo1)){
+	fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
+		est.qtd==qnt_estoque;
+	fwrite (&est, sizeof(produto), 1, Arquivo);
+	fseek(Arquivo, sizeof(est)* 0, SEEK_END);
+	}
+	printf("\n\nQuantidade disponivel em estoque!\n");
+		}
+		else{
+	printf("\n\nQuantidade não disponivel em estoque!\n\nVoltando ao menu");
+	fflush(stdin);
+	getch();
+	return ;
+			}
+	}else{
+		printf("codigo do produto não existe\n");
+		getch();
+		return ;
+	} 
+}
 }
