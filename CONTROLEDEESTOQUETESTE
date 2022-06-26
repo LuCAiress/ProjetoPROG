@@ -22,7 +22,7 @@ struct compra_venda{
  char nomecli[50];
  char nomevendedor[50]; 
  char produtovendido[15]; 
- int qtd[]; 
+ int qtd; 
  
  };
 
