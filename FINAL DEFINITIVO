@@ -747,7 +747,7 @@ void consulta_compra(){
     while (fread (&ler, sizeof(ler), 1, Arquivo)){
     if (cod == ler.codigo_cv) {
         encon = 1;
-        printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nC�digo Produto: %d==\n==Quantidade: %d==\n",ler.codigo_cv, ler.nomecli, ler.nomevendedor, ler.codigoprod, ler.qtd);
+        printf("==Código de compra: %d==\n==Nome Cliente: %s==\n==Nome Vendedor: %s==\nCódigo Produto: %d==\n==Quantidade: %d==\n",ler.codigo_cv, ler.nomecli, ler.nomevendedor, ler.codigoprod, ler.qtd);
         getch();
         }
     }
@@ -841,7 +841,7 @@ fflush(stdin);
 if (conf == 'S'){
 memset(&excluir, 0, sizeof (struct compra_venda)); 
 
-printf("\n>>>Compra exclu�da com Sucesso!<<<");
+printf("\n>>>Compra excluída com Sucesso!<<<");
 fseek(Arquivo,sizeof(struct compra_venda)*-1, SEEK_CUR);
 fwrite(&excluir, sizeof(excluir), 1, Arquivo);
 fseek(Arquivo, sizeof(excluir)* 0, SEEK_END);
