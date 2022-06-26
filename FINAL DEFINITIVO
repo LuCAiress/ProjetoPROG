@@ -608,7 +608,7 @@ if (cod!=0){
 
 while (fread (&excluir, sizeof(excluir), 1, Arquivo)){
 if (cod == excluir.cdgprod){
-printf("\n==C�digo do produto: %d==\n==Nome: %s==\n==Preço: %f==\n==Quantidade: %d==\n",excluir.cdgprod, excluir.nome, excluir.preco, excluir.qtd);
+printf("\n==Código do produto: %d==\n==Nome: %s==\n==Preço: %f==\n==Quantidade: %d==\n",excluir.cdgprod, excluir.nome, excluir.preco, excluir.qtd);
 encon=1;
 
 printf("\n>>>Tem certeza que deseja excluir este produto? [S/N]<<< ");
