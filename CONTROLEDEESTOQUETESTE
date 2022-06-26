@@ -683,6 +683,10 @@ void entrada_compra (FILE * Arquivo, FILE * Arquivo1) {
 	novo.preco=novo.preco*qtd;
 	printf("\nO preço total da venda é: %d",novo.preco);
 	Validaresp();
+	while(fwrite(&M,sizeof(struct produto),1,Arquivo1));
+	
+		M.qtd==qnt_estoque;
+	
 	}
 	else{
 	printf("\n\nQuantidade não disponivel em estoque!\n\nVoltando ao menu");
