@@ -684,10 +684,10 @@ void entrada_compra (FILE * Arquivo, FILE * Arquivo1) {
 	printf("\nO preço total da venda é: %d",novo.preco);
 	Validaresp();
 	while(fwrite(&M,sizeof(struct produto),1,Arquivo1));
-	
+	 fseek(Arquivo,sizeof(struct produto)*-1, SEEK_CUR);
 		M.qtd==qnt_estoque;
-	
-	}
+	fwrite (&M, sizeof(produto), 1, Arquivo);
+	fseek(Arquivo, sizeof(M)* 0, SEEK_END);
 	else{
 	printf("\n\nQuantidade não disponivel em estoque!\n\nVoltando ao menu");
 	fflush(stdin);
