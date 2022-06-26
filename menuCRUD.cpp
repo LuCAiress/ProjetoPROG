@@ -663,7 +663,7 @@ void Entrada_compra(FILE *Arquivo){
 	fflush(stdin);
 	resp=Validaresp();
 	if(resp=='S'){
-	retorno=fwrite(&novo,sizeof(struct produto),1,Arquivo);
+	retorno=fwrite(&novo,sizeof(struct compra_venda),1,Arquivo);
 	if(retorno=1){
 	printf("\n>>>Compra cadastrada com sucesso!<<<");
 }
@@ -840,4 +840,3 @@ printf ("\n>>>Código inexistente!<<<");
 }
 }while(cod!=0);
 }
-
