@@ -51,7 +51,7 @@ void alterar_produto();
 void excluir_cliente();
 void excluir_produto();
 void incluir_compra();
-void Entrada_compra (FILE * Arquivo);
+void Entrada_compra (FILE * Arquivo, FILE * Arquivo1);
 void consulta_compra();
 void alterar_compra (); 
 void excluir_compra();
@@ -636,6 +636,7 @@ printf ("\n>>>Código inexistente!<<<");
 void incluir_compra(){
 
 	 FILE * Arquivo;
+	 FILE * Arquivo1=fopen("PRODUTO.txt", "rb+");
  	int erro=0;
      char arqprod [] = {"COMPRA.txt"};
 	 Arquivo = fopen(arqprod, "ab+");
@@ -649,13 +650,15 @@ void incluir_compra(){
  }
  } 
  	if(erro==0){
- 		Entrada_compra(Arquivo);
+ 		Entrada_compra(Arquivo, Arquivo1);
  		fclose (Arquivo);
+		fclose (Arquivo1);
 	 }	
  }
-void Entrada_compra(FILE *Arquivo){
-	int retorno;
+void Entrada_compra(FILE *Arquivo, FILE *Arquivo1){
+	int retorno=0, retorno1=0, cod, encon;
 	struct compra_venda novo;
+	struct produto est;
 	char resp;
 	do{
 	
@@ -670,24 +673,48 @@ void Entrada_compra(FILE *Arquivo){
 	printf("\n==Digite o nome do vendedor: ");
 	gets(novo.nomevendedor);
 	fflush(stdin);
-	printf("\n==Digite a quantidade comprada do produto: ");
-	scanf("%d",&novo.qtd);
-	fflush(stdin);
 	printf("\n==Digite o código do produto: ");
 	scanf("%d",&novo.codigoprod);
+	cod=novo.codigoprod;
 	fflush(stdin);
+	rewind(Arquivo1);
+	while(fread(&est,sizeof(est),1,Arquivo1)){
+		if(cod==est.cdgprod){
+			encon=1;
+			printf("\n==Digite a quantidade comprada do produto: ");
+			scanf("%d",&novo.qtd);
+			fflush(stdin);
+			est.qtd=est.qtd-novo.qtd;
+			if(est.qtd <=0){
+				printf("\n>>>Falta de estoque!<<<");
+				getch();
+			}
+		}
+		if(!encon){
+			printf("\n>>>Produto inexistente!<<<");
+			getch();
+		}
+	}
 	resp=Validaresp();
 	if(resp=='S'){
+	fseek(Arquivo1,sizeof(est)*-1,SEEK_CUR);
+	retorno1=fwrite(&est,sizeof(struct produto),1,Arquivo1);
 	retorno=fwrite(&novo,sizeof(struct compra_venda),1,Arquivo);
-	if(retorno=1){
+	
+	if(retorno==1 && retorno1==1){
 	printf("\n>>>Compra cadastrada com sucesso!<<<");
+	}
+	else {
+	printf("\n>>>ERRO: Não foi possível efetuar o cadastro!<<<");
+	getch();
+	}
 }
-		else printf("\n>>>ERRO: Não foi possível efetuar o cadastro!<<<");
-		getch();
+}	
+}while(novo.codigo_cv!=0);
+fclose(Arquivo);
+fclose(Arquivo1);
 }
-}
-}while(novo.codigo_cv!=0);	
-}
+
 void listagem_compra(){
 	int erro=0;
 	    FILE *Arquivo = fopen("COMPRA.txt", "rb");
