@@ -686,7 +686,7 @@ void Entrada_compra(FILE *Arquivo, FILE *Arquivo1){
 			fflush(stdin);
 			est.qtd=est.qtd-novo.qtd;
 			if(est.qtd <=0){
-				printf("\n>>>Falta de estoque!<<<");
+				printf("\n>>>Falta de estoque ou pedido maior que o estoque, tente pedir uma quantidade menor!<<<");
 				getch();
 			}
 		}
